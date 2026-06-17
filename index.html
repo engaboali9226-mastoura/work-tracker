@@ -1,17 +1,180 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="style.css">
 
-<title>Work Tracker</title>
-
 </head>
+
 <body>
 
-<h1>Work Tracker</h1>
+<div class="container">
+
+<div class="glass status-card">
+
+<div
+class="status-icon"
+id="statusIcon">
+
+🟡
+
+</div>
+
+<div
+class="status-title"
+id="statusTitle">
+
+Loading...
+
+</div>
+
+<div class="status-date" id="todayDate"></div>
+
+</div>
+
+<div class="glass time-card">
+
+<div class="label">
+TIME SELECTION
+</div>
+
+<div class="time-mode">
+
+<button
+class="mode-btn active"
+id="nowBtn"
+onclick="setMode('now')">
+
+Current Time
+
+</button>
+
+<button
+class="mode-btn"
+id="customBtn"
+onclick="setMode('custom')">
+
+Custom Time
+
+</button>
+
+</div>
+
+<div id="currentTimeBox">
+
+<div class="riyadh-time" id="riyadhClock">
+--:--
+</div>
+
+<div class="riyadh-label">
+Riyadh, KSA
+</div>
+
+</div>
+
+<div
+id="customTimeWrapper"
+style="display:none;">
+
+<div class="wheel-picker">
+
+<div class="wheel-highlight"></div>
+
+<div class="wheel-column" id="hourWheel">
+</div>
+
+<div class="wheel-column" id="minuteWheel">
+</div>
+
+<div class="wheel-column" id="periodWheel">
+
+<div class="wheel-item">AM</div>
+<div class="wheel-item">PM</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="actions">
+
+<button
+class="action-btn start-btn"
+onclick="startWork()">
+
+<div class="icon">🟢</div>
+
+<div class="btn-title">
+Start Work
+</div>
+
+<div class="btn-sub">
+Begin your day
+</div>
+
+</button>
+
+<button
+class="action-btn end-btn"
+onclick="endWork()">
+
+<div class="icon">🔴</div>
+
+<div class="btn-title">
+End Work
+</div>
+
+<div class="btn-sub">
+Finish work
+</div>
+
+</button>
+
+</div>
+
+<div class="glass summary">
+
+<div class="summary-title">
+Today
+</div>
+
+<div class="row">
+<span>Started</span>
+<span id="startedValue">--</span>
+</div>
+
+<div class="row">
+<span>Ended</span>
+<span id="endedValue">--</span>
+</div>
+
+<div class="row">
+<span>Hours</span>
+<span id="hoursValue">--</span>
+</div>
+
+<div class="row">
+<span>Overtime</span>
+<span id="overtimeValue">--</span>
+</div>
+
+<div class="row">
+<span>Activities</span>
+<span id="activitiesValue">0</span>
+</div>
+
+</div>
+
+</div>
+
+<div id="toast" class="toast"></div>
 
 <script src="script.js"></script>
 
