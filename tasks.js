@@ -526,12 +526,3 @@ function renderCompletedTasks(tasks){
     `).join("");
 
 }
-
-
-function addNote(id){
-  alert("Add Note: " + id);
-}
-
-function finishTask(id){
-  alert("Finish Task: " + id);
-}
