@@ -498,4 +498,3 @@ function renderCompletedTasks(tasks){
     `).join("");
 
 }
-function getCustomTime(){
