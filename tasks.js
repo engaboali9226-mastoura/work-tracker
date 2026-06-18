@@ -229,6 +229,271 @@ function getSelectedValue(wheelId){
 
     }
 
+    function getCustomTime(){
+
+  if(timeMode === "now")
+    return "";
+
+  const hour =
+    getSelectedValue(
+      "hourWheel"
+    );
+
+  const minute =
+    getSelectedValue(
+      "minuteWheel"
+    );
+
+  const period =
+    getSelectedValue(
+      "periodWheel"
+    );
+
+  return `${hour}:${minute} ${period}`;
+
+}
+
+function setMode(mode){
+
+  timeMode = mode;
+
+  document
+    .getElementById("nowBtn")
+    .classList.remove("active");
+
+  document
+    .getElementById("customBtn")
+    .classList.remove("active");
+
+  if(mode === "now"){
+
+    document
+      .getElementById("nowBtn")
+      .classList.add("active");
+
+    document
+      .getElementById("currentTimeBox")
+      .style.display = "block";
+
+    document
+      .getElementById("customTimeWrapper")
+      .style.display = "none";
+
+  }else{
+
+    document
+      .getElementById("customBtn")
+      .classList.add("active");
+
+    document
+      .getElementById("currentTimeBox")
+      .style.display = "none";
+
+    document
+      .getElementById("customTimeWrapper")
+      .style.display = "block";
+
+    setTimeout(() => {
+
+      highlightActiveItem(
+        document.getElementById(
+          "hourWheel"
+        )
+      );
+
+      highlightActiveItem(
+        document.getElementById(
+          "minuteWheel"
+        )
+      );
+
+      highlightActiveItem(
+        document.getElementById(
+          "periodWheel"
+        )
+      );
+
+    },120);
+
+  }
+
+}
+
+function showToast(
+  message,
+  type = "success"
+){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent =
+    message;
+
+  toast.className =
+    "toast";
+
+  toast.classList.add(type);
+
+  setTimeout(() => {
+
+    toast.classList.add(
+      "show"
+    );
+
+  },10);
+
+  setTimeout(() => {
+
+    toast.classList.remove(
+      "show"
+    );
+
+  },3000);
+
+}
+
+async function startTask(){
+
+  const taskName =
+    document
+      .getElementById(
+        "taskName"
+      )
+      .value
+      .trim();
+
+  const site =
+    document
+      .getElementById(
+        "taskSite"
+      )
+      .value
+      .trim();
+
+  const category =
+    document
+      .getElementById(
+        "taskCategory"
+      )
+      .value;
+
+  if(!taskName){
+
+    showToast(
+      "Enter task name",
+      "warning"
+    );
+
+    return;
+
+  }
+
+  const payload = {
+
+    action:"start",
+
+    taskName,
+
+    site,
+
+    category,
+
+    customTime:
+      getCustomTime()
+
+  };
+
+  console.log(
+    "Task Payload",
+    payload
+  );
+
+  showToast(
+    "Task ready for webhook",
+    "success"
+  );
+
+}
+
+function renderActiveTasks(tasks){
+
+  const container =
+    document.getElementById(
+      "activeTasks"
+    );
+
+  if(!tasks.length){
+
+    container.innerHTML = `
+      <div class="row">
+        <span>No active tasks</span>
+      </div>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML =
+    tasks.map(task => `
+      <div class="task-card">
+
+        <strong>
+          ${task.taskName}
+        </strong>
+
+        <br>
+
+        <small>
+          ${task.site}
+        </small>
+
+      </div>
+    `).join("");
+
+}
+
+function renderCompletedTasks(tasks){
+
+  const container =
+    document.getElementById(
+      "completedTasks"
+    );
+
+  if(!tasks.length){
+
+    container.innerHTML = `
+      <div class="row">
+        <span>No completed tasks</span>
+      </div>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML =
+    tasks.map(task => `
+      <div class="task-card">
+
+        <strong>
+          ${task.taskName}
+        </strong>
+
+        <br>
+
+        <small>
+          ${task.duration}
+        </small>
+
+      </div>
+    `).join("");
+
+}
+
   });
 
   return selectedValue;
