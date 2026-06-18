@@ -444,19 +444,47 @@ function renderActiveTasks(tasks){
 
   container.innerHTML =
     tasks.map(task => `
+
       <div class="task-card">
 
-        <strong>
+        <div class="task-header">
           ${task.taskName}
-        </strong>
+        </div>
 
-        <br>
+        <div class="task-meta">
+          📍 ${task.site || "--"}
+        </div>
 
-        <small>
-          ${task.site}
-        </small>
+        <div class="task-meta">
+          🏷️ ${task.category || "--"}
+        </div>
+
+        <div class="task-meta">
+          🕒 Started: ${task.startTime || "--"}
+        </div>
+
+        <div class="task-actions">
+
+          <button
+            class="task-btn notes-btn"
+            onclick="addNote('${task.id}')">
+
+            Note
+
+          </button>
+
+          <button
+            class="task-btn finish-btn"
+            onclick="finishTask('${task.id}')">
+
+            Finish
+
+          </button>
+
+        </div>
 
       </div>
+
     `).join("");
 
 }
