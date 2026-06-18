@@ -497,4 +497,4 @@ function renderCompletedTasks(tasks){
       </div>
     `).join("");
 
-}
+};
