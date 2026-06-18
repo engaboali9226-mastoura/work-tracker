@@ -498,3 +498,5 @@ function renderCompletedTasks(tasks){
     `).join("");
 
 };
+
+console.log("tasks.js loaded");
