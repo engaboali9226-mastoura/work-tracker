@@ -526,3 +526,28 @@ function renderCompletedTasks(tasks){
     `).join("");
 
 }
+
+renderActiveTasks([
+  {
+    id:"1",
+    taskName:"WO-1254 MCC Panel",
+    site:"Jeddah",
+    category:"Control",
+    startTime:"08:15 AM"
+  },
+  {
+    id:"2",
+    taskName:"WO-1300 VFD Testing",
+    site:"Makkah",
+    category:"Power",
+    startTime:"09:40 AM"
+  }
+]);
+
+function addNote(id){
+  alert("Add Note: " + id);
+}
+
+function finishTask(id){
+  alert("Finish Task: " + id);
+}
