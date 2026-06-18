@@ -527,22 +527,6 @@ function renderCompletedTasks(tasks){
 
 }
 
-renderActiveTasks([
-  {
-    id:"1",
-    taskName:"WO-1254 MCC Panel",
-    site:"Jeddah",
-    category:"Control",
-    startTime:"08:15 AM"
-  },
-  {
-    id:"2",
-    taskName:"WO-1300 VFD Testing",
-    site:"Makkah",
-    category:"Power",
-    startTime:"09:40 AM"
-  }
-]);
 
 function addNote(id){
   alert("Add Note: " + id);
