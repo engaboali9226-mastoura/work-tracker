@@ -229,6 +229,11 @@ function getSelectedValue(wheelId){
 
     }
 
+  });
+
+  return selectedValue;
+
+}
     function getCustomTime(){
 
   if(timeMode === "now")
@@ -494,8 +499,3 @@ function renderCompletedTasks(tasks){
 
 }
 
-  });
-
-  return selectedValue;
-
-}
