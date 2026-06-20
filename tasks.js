@@ -10,26 +10,52 @@ document.getElementById("tasksDate").innerText = new Date().toLocaleDateString("
 });
 
 // دالة الإرسال المركزية إلى n8n Webhook
-function sendToN8N(payload) {
-  const n8nUrl = "https://n8n-mq4x.onrender.com/webhook-test/Task Manager API";
-  
-  fetch(n8nUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  })
-  .then(response => {
-    if (response.ok) {
-      console.log(`[n8n] تم إرسال الأكشن (${payload.action}) بنجاح!`);
-    } else {
-      console.error("[n8n] السيرفر واجه مشكلة في استقبال البيانات");
-    }
-  })
-  .catch(error => console.error("[n8n] خطأ في الاتصال بالشبكة:", error));
-}
+async function sendToN8N(payload) {
 
+  const n8nUrl =
+    "https://n8n-mq4x.onrender.com/webhook-test/Task Manager API";
+
+  try {
+
+    const response =
+      await fetch(n8nUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Server Error"
+      );
+
+    }
+
+    const data =
+      await response.json();
+
+    console.log(
+      "[n8n Response]",
+      data
+    );
+
+    return data;
+
+  } catch (error) {
+
+    console.error(
+      "[n8n]",
+      error
+    );
+
+    return null;
+
+  }
+
+}
 function saveTasks(){
   localStorage.setItem("activeTasks", JSON.stringify(activeTasks));
   localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
@@ -252,7 +278,8 @@ async function startTask(){
   };
 
   // إرسال البيانات فوراً للـ Webhook
-  sendToN8N(payload);
+  const result = await sendToN8N(payload);
+  console.log("Task Key:", result?.taskKey);
 
   // تحديث الـ Local UI
   const startTimeDisplay = timeMode === "now" ? now.toLocaleTimeString("en-US", {
@@ -262,14 +289,15 @@ async function startTask(){
       hour12:true
   }) : getCustomTime();
 
-  const task = {
-    id: Date.now(),
-    taskName,
-    site,
-    category,
-    startTime: startTimeDisplay,
-    notes:""
-  };
+const task = {
+  id: Date.now(),
+  taskKey: result?.taskKey || null,
+  taskName,
+  site,
+  category,
+  startTime: startTimeDisplay,
+  notes:""
+};
 
   activeTasks.push(task);
   saveTasks();
