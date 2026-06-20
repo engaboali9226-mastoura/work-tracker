@@ -317,11 +317,23 @@ function renderCompletedTasks(tasks){
 
 function addNote(taskId){
   const note = prompt("Task Note");
-  if(!note) return;
+  if(!note) return; // إذا ضغط إلغاء أو سابها فاضية مش هيعمل حاجة
+  
   const task = activeTasks.find(t => t.id == taskId);
   if(task){
     task.notes = note;
     showToast("Note Saved", "success");
+
+    // 🚀 الجزء المضاف: إرسال النوت فوراً لـ n8n Webhook لتحديث الريكورد في نوشن
+    const payload = {
+      action: "note",
+      taskName: task.taskName,
+      category: task.category,
+      site: task.site,
+      notes: task.notes
+    };
+
+    sendToN8N(payload);
   }
 }
 
