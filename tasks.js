@@ -1,3 +1,4 @@
+console.log("tasks.js loaded");
 let activeTasks = [];
 let completedTasks = [];
 let timeMode = "now";
