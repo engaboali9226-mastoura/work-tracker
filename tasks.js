@@ -13,6 +13,46 @@ document.getElementById("tasksDate").innerText =
     }
   );
 
+function saveTasks(){
+
+  localStorage.setItem(
+    "activeTasks",
+    JSON.stringify(activeTasks)
+  );
+
+  localStorage.setItem(
+    "completedTasks",
+    JSON.stringify(completedTasks)
+  );
+
+}
+
+function loadTasks(){
+
+  activeTasks =
+    JSON.parse(
+      localStorage.getItem(
+        "activeTasks"
+      )
+    ) || [];
+
+  completedTasks =
+    JSON.parse(
+      localStorage.getItem(
+        "completedTasks"
+      )
+    ) || [];
+
+  renderActiveTasks(
+    activeTasks
+  );
+
+  renderCompletedTasks(
+    completedTasks
+  );
+
+}
+
 function updateRiyadhClock() {
 
   const now = new Date();
@@ -60,6 +100,41 @@ document.addEventListener(
         "periodWheel"
       );
 
+    const now = new Date();
+
+let hour =
+  now.toLocaleString(
+    "en-US",
+    {
+      timeZone:"Asia/Riyadh",
+      hour:"numeric",
+      hour12:true
+    }
+  );
+
+hour = parseInt(hour);
+
+const minute =
+  now.toLocaleString(
+    "en-US",
+    {
+      timeZone:"Asia/Riyadh",
+      minute:"2-digit"
+    }
+  );
+
+const period =
+  now.toLocaleString(
+    "en-US",
+    {
+      timeZone:"Asia/Riyadh",
+      hour:"numeric",
+      hour12:true
+    }
+  ).includes("PM")
+    ? "PM"
+    : "AM";
+
     for(let i = 1; i <= 12; i++){
 
       const item =
@@ -95,6 +170,25 @@ document.addEventListener(
       minuteWheel.appendChild(item);
 
     }
+
+    setTimeout(() => {
+
+  hourWheel.scrollTop =
+    (hour - 1) * 36;
+
+  minuteWheel.scrollTop =
+    parseInt(minute) * 36;
+
+  periodWheel.scrollTop =
+    period === "PM"
+      ? 36
+      : 0;
+
+  highlightActiveItem(hourWheel);
+  highlightActiveItem(minuteWheel);
+  highlightActiveItem(periodWheel);
+
+},100);
 
     const wheels = [
       hourWheel,
