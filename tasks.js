@@ -1,19 +1,15 @@
 let activeTasks = [];
 let completedTasks = [];
-
 let timeMode = "now";
 
-document.getElementById("tasksDate").innerText =
-  new Date().toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    }
-  );
+// ضبط تاريخ اليوم في الهيدر عند تشغيل الصفحة
+document.getElementById("tasksDate").innerText = new Date().toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric"
+});
 
-// 🌐 دالة الإرسال المركزية إلى n8n Webhook
+// دالة الإرسال المركزية إلى n8n Webhook
 function sendToN8N(payload) {
   const n8nUrl = "https://n8n-mq4x.onrender.com/webhook-test/a1470eb8-79c6-43e3-b5a4-38ca0b60ea63";
   
@@ -26,7 +22,7 @@ function sendToN8N(payload) {
   })
   .then(response => {
     if (response.ok) {
-      console.log(`[n8n] تم إرسال حركة (${payload.action}) بنجاح!`);
+      console.log(`[n8n] تم إرسال الأكشن (${payload.action}) بنجاح!`);
     } else {
       console.error("[n8n] السيرفر واجه مشكلة في استقبال البيانات");
     }
@@ -48,73 +44,71 @@ function loadTasks(){
 
 function updateRiyadhClock() {
   const now = new Date();
-  const time = now.toLocaleTimeString(
-    "en-US",
-    {
-      timeZone: "Asia/Riyadh",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true
-    }
-  );
+  const time = now.toLocaleTimeString("en-US", {
+    timeZone: "Asia/Riyadh",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  });
   document.getElementById("riyadhClock").innerText = time;
 }
 
 updateRiyadhClock();
 setInterval(updateRiyadhClock, 1000);
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-    const hourWheel = document.getElementById("hourWheel");
-    const minuteWheel = document.getElementById("minuteWheel");
-    const periodWheel = document.getElementById("periodWheel");
-    const now = new Date();
+document.addEventListener("DOMContentLoaded", () => {
+  const hourWheel = document.getElementById("hourWheel");
+  const minuteWheel = document.getElementById("minuteWheel");
+  const periodWheel = document.getElementById("periodWheel");
+  const now = new Date();
 
-    let hour = now.toLocaleString("en-US", { timeZone:"Asia/Riyadh", hour:"numeric", hour12:true });
-    hour = parseInt(hour);
+  let hour = now.toLocaleString("en-US", { timeZone:"Asia/Riyadh", hour:"numeric", hour12:true });
+  hour = parseInt(hour);
 
-    const minute = now.toLocaleString("en-US", { timeZone:"Asia/Riyadh", minute:"2-digit" });
+  const minute = now.toLocaleString("en-US", { timeZone:"Asia/Riyadh", minute:"2-digit" });
 
-    const period = now.toLocaleString("en-US", { timeZone:"Asia/Riyadh", hour:"numeric", hour12:true }).includes("PM") ? "PM" : "AM";
+  const period = now.toLocaleString("en-US", { timeZone:"Asia/Riyadh", hour:"numeric", hour12:true }).includes("PM") ? "PM" : "AM";
 
-    for(let i = 1; i <= 12; i++){
-      const item = document.createElement("div");
-      item.className = "wheel-item";
-      item.innerText = i.toString().padStart(2,"0");
-      hourWheel.appendChild(item);
-    }
-
-    for(let i = 0; i < 60; i++){
-      const item = document.createElement("div");
-      item.className = "wheel-item";
-      item.innerText = i.toString().padStart(2,"0");
-      minuteWheel.appendChild(item);
-    }
-
-    setTimeout(() => {
-      hourWheel.scrollTop = (hour - 1) * 36;
-      minuteWheel.scrollTop = parseInt(minute) * 36;
-      periodWheel.scrollTop = period === "PM" ? 36 : 0;
-
-      highlightActiveItem(hourWheel);
-      highlightActiveItem(minuteWheel);
-      highlightActiveItem(periodWheel);
-    },100);
-
-    const wheels = [hourWheel, minuteWheel, periodWheel];
-    wheels.forEach(wheel => {
-      wheel.addEventListener("scroll", () => highlightActiveItem(wheel));
-      wheel.addEventListener("wheel", (e) => {
-        e.preventDefault();
-        const itemHeight = 36;
-        const direction = e.deltaY > 0 ? 1 : -1;
-        wheel.scrollTop += direction * itemHeight;
-      }, { passive:false });
-      setTimeout(() => highlightActiveItem(wheel), 100);
-    });
+  // بناء عناصر الساعات
+  for(let i = 1; i <= 12; i++){
+    const item = document.createElement("div");
+    item.className = "wheel-item";
+    item.innerText = i.toString().padStart(2,"0");
+    hourWheel.appendChild(item);
   }
-);
+
+  // بناء عناصر الدقائق
+  for(let i = 0; i < 60; i++){
+    const item = document.createElement("div");
+    item.className = "wheel-item";
+    item.innerText = i.toString().padStart(2,"0");
+    minuteWheel.appendChild(item);
+  }
+
+  setTimeout(() => {
+    hourWheel.scrollTop = (hour - 1) * 36;
+    minuteWheel.scrollTop = parseInt(minute) * 36;
+    periodWheel.scrollTop = period === "PM" ? 36 : 0;
+
+    highlightActiveItem(hourWheel);
+    highlightActiveItem(minuteWheel);
+    highlightActiveItem(periodWheel);
+  }, 100);
+
+  const wheels = [hourWheel, minuteWheel, periodWheel];
+  wheels.forEach(wheel => {
+    wheel.addEventListener("scroll", () => highlightActiveItem(wheel));
+    wheel.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const itemHeight = 36;
+      const direction = e.deltaY > 0 ? 1 : -1;
+      wheel.scrollTop += direction * itemHeight;
+    }, { passive:false });
+    setTimeout(() => highlightActiveItem(wheel), 100);
+  });
+
+  loadTasks();
+});
 
 function highlightActiveItem(wheel){
   const items = wheel.querySelectorAll(".wheel-item");
@@ -127,7 +121,7 @@ function highlightActiveItem(wheel){
     if(Math.abs(wheelCenter - itemCenter) < 22){
       item.style.opacity = "1";
       item.style.transform = "scale(1.1)";
-    }else{
+    } else {
       item.style.opacity = ".25";
       item.style.transform = "scale(1)";
     }
@@ -172,7 +166,7 @@ function setMode(mode){
     document.getElementById("nowBtn").classList.add("active");
     document.getElementById("currentTimeBox").style.display = "block";
     document.getElementById("customTimeWrapper").style.display = "none";
-  }else{
+  } else {
     document.getElementById("customBtn").classList.add("active");
     document.getElementById("currentTimeBox").style.display = "none";
     document.getElementById("customTimeWrapper").style.display = "block";
@@ -181,7 +175,7 @@ function setMode(mode){
       highlightActiveItem(document.getElementById("hourWheel"));
       highlightActiveItem(document.getElementById("minuteWheel"));
       highlightActiveItem(document.getElementById("periodWheel"));
-    },120);
+    }, 120);
   }
 }
 
@@ -191,11 +185,11 @@ function showToast(message, type = "success"){
   toast.className = "toast";
   toast.classList.add(type);
 
-  setTimeout(() => { toast.classList.add("show"); },10);
-  setTimeout(() => { toast.classList.remove("show"); },3000);
+  setTimeout(() => { toast.classList.add("show"); }, 10);
+  setTimeout(() => { toast.classList.remove("show"); }, 3000);
 }
 
-// 🟢 تعديل دالة بدء المهمة (الحضور) لإرسال البيانات
+// 🟢 زرار الحضور وبدء المهمة
 async function startTask(){
   const taskName = document.getElementById("taskName").value.trim();
   const site = document.getElementById("taskSite").value.trim();
@@ -206,17 +200,17 @@ async function startTask(){
     return;
   }
 
-  // تجهيز الـ Payload بالمواصفات المتوافقة مع الـ n8n ونوشن
+  // تجهيز الـ Payload لـ n8n
   const payload = {
     action: "start",
-    timeType: timeMode === "now" ? "current" : "custom", // تحديد نوع الإدخال تلقائياً
+    timeType: timeMode === "now" ? "current" : "custom",
     taskName,
     site,
     category,
-    customTime: getCustomTime() // سيجلب التوقيت "08:30 AM" لو كاستم، أو "" لو الحالي
+    customTime: getCustomTime()
   };
 
-  // 🔥 إرسال البيانات فوراً لـ n8n Webhook
+  // إرسال البيانات فوراً للـ Webhook
   sendToN8N(payload);
 
   const startTime = payload.customTime || new Date().toLocaleTimeString("en-US", {
@@ -236,6 +230,7 @@ async function startTask(){
   };
 
   activeTasks.push(task);
+  saveTasks();
   renderActiveTasks(activeTasks);
   showToast("Task Started", "success");
 
@@ -288,14 +283,14 @@ function addNote(taskId){
   }
 }
 
-// 🔴 تعديل دالة إنهاء المهمة (الانصراف) لإرسال البيانات
+// 🔴 زرار الانصراف وإنهاء المهمة
 async function finishTask(taskId){
   const taskIndex = activeTasks.findIndex(t => t.id == taskId);
   if(taskIndex === -1) return;
 
   const task = activeTasks[taskIndex];
 
-  // تجهيز الـ Payload الخاص بالإنهاء بناءً على حالة الـ UI الحالية للمود والوقت
+  // تجهيز الـ Payload بناءً على التوقيت المختار لحظة الضغط على إنهاء
   const payload = {
     action: "end",
     timeType: timeMode === "now" ? "current" : "custom",
@@ -305,13 +300,14 @@ async function finishTask(taskId){
     customTime: getCustomTime()
   };
 
-  // 🔥 إرسال داتا الإنهاء فوراً لـ n8n Webhook للحساب والتسجيل المباشر
+  // إرسال البيانات فوراً للـ Webhook
   sendToN8N(payload);
 
   task.duration = "Finished";
   completedTasks.push(task);
   activeTasks.splice(taskIndex, 1);
 
+  saveTasks();
   renderActiveTasks(activeTasks);
   renderCompletedTasks(completedTasks);
   showToast("Task Completed", "success");
