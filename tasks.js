@@ -190,6 +190,7 @@ function showToast(message, type = "success"){
 }
 
 // 🟢 زرار الحضور وبدء المهمة
+// 🟢 زرار الحضور وبدء المهمة (محدث لإرسال تواريخ جاهزة لـ Notion)
 async function startTask(){
   const taskName = document.getElementById("taskName").value.trim();
   const site = document.getElementById("taskSite").value.trim();
@@ -200,32 +201,73 @@ async function startTask(){
     return;
   }
 
-  // تجهيز الـ Payload لـ n8n
+  // 1. حساب تاريخ اليوم الحالي بتوقيت الرياض بصيغة YYYY-MM-DD
+  const now = new Date();
+  const riyadhDateParts = now.toLocaleDateString("en-US", {
+    timeZone: "Asia/Riyadh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).split('/'); 
+  // ترتيب Parts الـ locale للافتراضي en-US هو [Month, Day, Year]
+  const todayDateStr = `${riyadhDateParts[2]}-${riyadhDateParts[0]}-${riyadhDateParts[1]}`;
+
+  let finalStartDateTime = "";
+
+  // 2. حساب وقت البداية بدقة بناءً على المود المختار
+  if (timeMode === "now") {
+    // جلب الوقت الحالي وإضافة فارق التوقيت ليعكس آسيا/الرياض (+03:00) بصيغة ISO
+    const riyadhTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
+    finalStartDateTime = riyadhTime.toISOString().replace('Z', '+03:00');
+  } else {
+    // إذا كان التوقيت مخصص، نقوم بتفكيك الساعة والدقيقة والـ AM/PM من الـ Wheel Picker
+    const customTime = getCustomTime(); // "01:30 PM"
+    const match = customTime.match(/^(\d{2}):(\d{2})\s(AM|PM)$/i);
+    
+    if (match) {
+      let hours = parseInt(match[1], 10);
+      const minutes = match[2];
+      const period = match[3].toUpperCase();
+      
+      if (period === "PM" && hours < 12) hours += 12;
+      if (period === "AM" && hours === 12) hours = 0;
+      
+      const hoursStr = hours.toString().padStart(2, '0');
+      finalStartDateTime = `${todayDateStr}T${hoursStr}:${minutes}:00+03:00`;
+    } else {
+      // حماية احتياطية
+      const riyadhTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
+      finalStartDateTime = riyadhTime.toISOString().replace('Z', '+03:00');
+    }
+  }
+
+  // تجهيز الـ Payload لـ n8n بالبيانات الجاهزة فوراً
   const payload = {
     action: "start",
-    timeType: timeMode === "now" ? "current" : "custom",
     taskName,
     site,
     category,
-    customTime: getCustomTime()
+    notionDate: todayDateStr,       // التاريخ مجهز لـ Notion
+    notionStartTime: finalStartDateTime // الوقت مجهز بالـ Timezone لـ Notion
   };
 
   // إرسال البيانات فوراً للـ Webhook
   sendToN8N(payload);
 
-  const startTime = payload.customTime || new Date().toLocaleTimeString("en-US", {
+  // تحديث الـ Local UI
+  const startTimeDisplay = timeMode === "now" ? now.toLocaleTimeString("en-US", {
       timeZone:"Asia/Riyadh",
       hour:"2-digit",
       minute:"2-digit",
       hour12:true
-  });
+  }) : getCustomTime();
 
   const task = {
     id: Date.now(),
     taskName,
     site,
     category,
-    startTime,
+    startTime: startTimeDisplay,
     notes:""
   };
 
