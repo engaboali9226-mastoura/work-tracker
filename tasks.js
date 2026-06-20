@@ -1,3 +1,6 @@
+let activeTasks = [];
+let completedTasks = [];
+
 let timeMode = "now";
 
 document.getElementById("tasksDate").innerText =
@@ -411,15 +414,34 @@ async function startTask(){
 
   };
 
-  console.log(
-    "Task Payload",
-    payload
-  );
+ const task = {
 
-  showToast(
-    "Task ready for webhook",
-    "success"
-  );
+  id: Date.now(),
+
+  taskName,
+
+  site,
+
+  category,
+
+  startTime:
+    payload.customTime || "Current Time",
+
+  notes: ""
+
+};
+
+activeTasks.push(task);
+
+renderActiveTasks(activeTasks);
+
+showToast(
+  "Task Started",
+  "success"
+);
+
+document.getElementById("taskName").value = "";
+document.getElementById("taskSite").value = "";
 
 }
 
@@ -524,5 +546,69 @@ function renderCompletedTasks(tasks){
 
       </div>
     `).join("");
+
+}
+
+function addNote(taskId){
+
+  const note = prompt(
+    "Task Note"
+  );
+
+  if(!note) return;
+
+  const task =
+    activeTasks.find(
+      t => t.id == taskId
+    );
+
+  if(task){
+
+    task.notes = note;
+
+    showToast(
+      "Note Saved",
+      "success"
+    );
+
+  }
+
+}
+
+function finishTask(taskId){
+
+  const taskIndex =
+    activeTasks.findIndex(
+      t => t.id == taskId
+    );
+
+  if(taskIndex === -1)
+    return;
+
+  const task =
+    activeTasks[taskIndex];
+
+  task.duration =
+    "Finished";
+
+  completedTasks.push(task);
+
+  activeTasks.splice(
+    taskIndex,
+    1
+  );
+
+  renderActiveTasks(
+    activeTasks
+  );
+
+  renderCompletedTasks(
+    completedTasks
+  );
+
+  showToast(
+    "Task Completed",
+    "success"
+  );
 
 }
