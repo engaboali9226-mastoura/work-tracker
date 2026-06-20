@@ -414,27 +414,18 @@ async function startTask(){
 
   };
 
- const task = {
+const startTime =
+  payload.customTime ||
 
-  id: Date.now(),
-
-  taskName,
-
-  site,
-
-  category,
-
- const startTime = payload.customTime ||
-
-new Date().toLocaleTimeString(
-  "en-US",
-  {
-    timeZone:"Asia/Riyadh",
-    hour:"2-digit",
-    minute:"2-digit",
-    hour12:true
-  }
-);
+  new Date().toLocaleTimeString(
+    "en-US",
+    {
+      timeZone:"Asia/Riyadh",
+      hour:"2-digit",
+      minute:"2-digit",
+      hour12:true
+    }
+  );
 
 const task = {
 
@@ -449,10 +440,6 @@ const task = {
   startTime,
 
   notes:""
-
-};
-
-  notes: ""
 
 };
 
