@@ -133,6 +133,7 @@ margin-bottom:20px;
   transition:all .25s ease;
   position:relative;
   overflow:hidden;
+  width:100%;
 }
 
 .action-btn::after{
@@ -275,7 +276,7 @@ transform:scale(1);
 .start-btn{
 
 border:1px solid #dcfce7;
-
+min-height:88px;
 box-shadow:0 8px 20px rgba(34,197,94,.08);
 
 }
