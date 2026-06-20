@@ -403,3 +403,5 @@ async function finishTask(taskId){
   renderCompletedTasks(completedTasks);
   showToast("Task Completed", "success");
 }
+
+alert("tasks.js loaded");
