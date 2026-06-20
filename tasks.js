@@ -17,14 +17,16 @@ async function sendToN8N(payload) {
 
   try {
 
-    const response =
-      await fetch(n8nUrl, {
+    const response = await fetch(
+      n8nUrl,
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(payload)
-      });
+      }
+    );
 
     if (!response.ok) {
 
@@ -44,10 +46,10 @@ async function sendToN8N(payload) {
 
     return data;
 
-  } catch (error) {
+  } catch(error) {
 
     console.error(
-      "[n8n]",
+      "[n8n Error]",
       error
     );
 
@@ -56,6 +58,7 @@ async function sendToN8N(payload) {
   }
 
 }
+
 function saveTasks(){
   localStorage.setItem("activeTasks", JSON.stringify(activeTasks));
   localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
@@ -278,8 +281,13 @@ async function startTask(){
   };
 
   // إرسال البيانات فوراً للـ Webhook
-  const result = await sendToN8N(payload);
-  console.log("Task Key:", result?.taskKey);
+  const result =
+    await sendToN8N(payload);
+  
+  console.log(
+    "Task Key:",
+    result?.taskKey
+  );
 
   // تحديث الـ Local UI
   const startTimeDisplay = timeMode === "now" ? now.toLocaleTimeString("en-US", {
