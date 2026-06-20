@@ -1,62 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Tasks</title>
-
-<link rel="stylesheet" href="style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tasks</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="container">
 
-  <!-- Header -->
-
   <div class="glass status-card">
-
-    <div class="status-icon">
-      📋
-    </div>
-
-    <div class="status-title">
-      Task Management
-    </div>
-
-    <div
-      class="status-date"
-      id="tasksDate">
-    </div>
-
+    <div class="status-icon">📋</div>
+    <div class="status-title">Task Management</div>
+    <div class="status-date" id="tasksDate"></div>
   </div>
 
-  <!-- New Task -->
-
   <div class="glass time-card">
+    <div class="label">NEW TASK</div>
+    <input id="taskName" class="task-input" placeholder="Task Name">
+    <input id="taskSite" class="task-input" placeholder="Site">
 
-    <div class="label">
-      NEW TASK
-    </div>
-
-    <input
-      id="taskName"
-      class="task-input"
-      placeholder="Task Name">
-
-    <input
-      id="taskSite"
-      class="task-input"
-      placeholder="Site">
-
-    <select
-      id="taskCategory"
-      class="task-input">
-
+    <select id="taskCategory" class="task-input">
       <option value="Control">Control</option>
       <option value="Power">Power</option>
       <option value="Instrumentation">Instrumentation</option>
@@ -67,161 +32,58 @@
       <option value="Meeting">Meeting</option>
       <option value="Site Visit">Site Visit</option>
       <option value="Other">Other</option>
-
     </select>
 
-    <div
-      class="label"
-      style="margin-top:12px;">
-
-      TIME SELECTION
-
-    </div>
-
+    <div class="label" style="margin-top:12px;">TIME SELECTION</div>
     <div class="time-mode">
-
-      <button
-        class="mode-btn active"
-        id="nowBtn"
-        onclick="setMode('now')">
-
-        Current Time
-
-      </button>
-
-      <button
-        class="mode-btn"
-        id="customBtn"
-        onclick="setMode('custom')">
-
-        Custom Time
-
-      </button>
-
+      <button class="mode-btn active" id="nowBtn" onclick="setMode('now')">Current Time</button>
+      <button class="mode-btn" id="customBtn" onclick="setMode('custom')">Custom Time</button>
     </div>
 
     <div id="currentTimeBox">
-
-      <div
-        class="riyadh-time"
-        id="riyadhClock">
-
-        --:--
-
-      </div>
-
-      <div class="riyadh-label">
-        Riyadh, KSA
-      </div>
-
+      <div class="riyadh-time" id="riyadhClock">--:--</div>
+      <div class="riyadh-label">Riyadh, KSA</div>
     </div>
 
-    <div
-      id="customTimeWrapper"
-      style="display:none;">
-
+    <div id="customTimeWrapper" style="display:none;">
       <div class="wheel-picker">
-
         <div class="wheel-highlight"></div>
-
-        <div
-          class="wheel-column"
-          id="hourWheel">
+        <div class="wheel-column" id="hourWheel"></div>
+        <div class="wheel-column" id="minuteWheel"></div>
+        <div class="wheel-column" id="periodWheel">
+          <div class="wheel-item">AM</div>
+          <div class="wheel-item">PM</div>
         </div>
-
-        <div
-          class="wheel-column"
-          id="minuteWheel">
-        </div>
-
-        <div
-          class="wheel-column"
-          id="periodWheel">
-
-          <div class="wheel-item">
-            AM
-          </div>
-
-          <div class="wheel-item">
-            PM
-          </div>
-
-        </div>
-
       </div>
-
     </div>
 
     <div style="margin-top:20px;">
-
-      <button
-        class="action-btn start-btn"
-        onclick="startTask()">
-
-        <div class="icon">
-          📋
-        </div>
-
-        <div class="btn-title">
-          Start Task
-        </div>
-
-        <div class="btn-sub">
-          Create New Task
-        </div>
-
+      <button class="action-btn start-btn" onclick="startTask()">
+        <div class="icon">📋</div>
+        <div class="btn-title">Start Task</div>
+        <div class="btn-sub">Create New Task</div>
       </button>
-
     </div>
-
   </div>
-
-  <!-- Active Tasks -->
 
   <div class="glass summary">
-
-    <div class="summary-title">
-      Active Tasks
-    </div>
-
+    <div class="summary-title">Active Tasks</div>
     <div id="activeTasks">
-
-      <div class="row">
-        <span>No active tasks</span>
-      </div>
-
+      <div class="row"><span>No active tasks</span></div>
     </div>
-
   </div>
 
-  <!-- Completed Tasks -->
-
-  <div
-    class="glass summary"
-    style="margin-top:14px;">
-
-    <div class="summary-title">
-      Completed Tasks
-    </div>
-
+  <div class="glass summary" style="margin-top:14px;">
+    <div class="summary-title">Completed Tasks</div>
     <div id="completedTasks">
-
-      <div class="row">
-        <span>No completed tasks</span>
-      </div>
-
+      <div class="row"><span>No completed tasks</span></div>
     </div>
-
   </div>
 
 </div>
 
-<div
-  id="toast"
-  class="toast">
-</div>
+<div id="toast" class="toast"></div>
 
 <script src="tasks.js"></script>
-
 </body>
 </html>
