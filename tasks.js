@@ -424,8 +424,33 @@ async function startTask(){
 
   category,
 
-  startTime:
-    payload.customTime || "Current Time",
+ const startTime = payload.customTime ||
+
+new Date().toLocaleTimeString(
+  "en-US",
+  {
+    timeZone:"Asia/Riyadh",
+    hour:"2-digit",
+    minute:"2-digit",
+    hour12:true
+  }
+);
+
+const task = {
+
+  id: Date.now(),
+
+  taskName,
+
+  site,
+
+  category,
+
+  startTime,
+
+  notes:""
+
+};
 
   notes: ""
 
