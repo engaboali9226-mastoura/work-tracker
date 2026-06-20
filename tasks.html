@@ -57,52 +57,25 @@
       id="taskCategory"
       class="task-input">
 
-      <option value="Control">
-        Control
-      </option>
-
-      <option value="Power">
-        Power
-      </option>
-
-      <option value="Instrumentation">
-        Instrumentation
-      </option>
-
-      <option value="SCADA">
-        SCADA
-      </option>
-
-      <option value="Communication">
-        Communication
-      </option>
-
-      <option value="Testing">
-        Testing
-      </option>
-
-      <option value="Documentation">
-        Documentation
-      </option>
-
-      <option value="Meeting">
-        Meeting
-      </option>
-
-      <option value="Site Visit">
-        Site Visit
-      </option>
-
-      <option value="Other">
-        Other
-      </option>
+      <option value="Control">Control</option>
+      <option value="Power">Power</option>
+      <option value="Instrumentation">Instrumentation</option>
+      <option value="SCADA">SCADA</option>
+      <option value="Communication">Communication</option>
+      <option value="Testing">Testing</option>
+      <option value="Documentation">Documentation</option>
+      <option value="Meeting">Meeting</option>
+      <option value="Site Visit">Site Visit</option>
+      <option value="Other">Other</option>
 
     </select>
 
-    <!-- Time Mode -->
+    <div
+      class="label"
+      style="margin-top:12px;">
 
-    <div class="label" style="margin-top:12px;">
       TIME SELECTION
+
     </div>
 
     <div class="time-mode">
@@ -203,36 +176,45 @@
 
   </div>
 
+  <!-- Active Tasks -->
+
   <div class="glass summary">
 
-  <div class="summary-title">
-    Active Tasks
+    <div class="summary-title">
+      Active Tasks
+    </div>
+
+    <div id="activeTasks">
+
+      <div class="row">
+        <span>No active tasks</span>
+      </div>
+
+    </div>
+
   </div>
 
-  <div id="activeTasks">
+  <!-- Completed Tasks -->
 
-    <div class="row">
-      <span>No active tasks</span>
+  <div
+    class="glass summary"
+    style="margin-top:14px;">
+
+    <div class="summary-title">
+      Completed Tasks
+    </div>
+
+    <div id="completedTasks">
+
+      <div class="row">
+        <span>No completed tasks</span>
+      </div>
+
     </div>
 
   </div>
 
 </div>
-
-<div class="glass summary">
-
-  <div class="summary-title">
-    Completed Tasks
-  </div>
-
-  <div id="completedTasks">
-
-    <div class="row">
-      <span>No completed tasks</span>
-    </div>
-
-  </div>
-
 
 <div
   id="toast"
